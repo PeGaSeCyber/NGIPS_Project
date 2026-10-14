@@ -343,21 +343,6 @@ Scénario : tentative de connexion à la session utilisateur **« User »** avec
 
 ---
 
-## 9. Évaluation financière
-
-| Référence | Désignation | Quantité | Prix unitaire | Montant total |
-|---|---|---|---|---|
-| HPE ProLiant MicroServer Gen11 | Serveur HP | 1 | 1 553 000 FCFA (≈ 2 699 $) | 1 553 000 FCFA |
-| Netgate 6100 Security Gateway (pfSense Plus) | Pare-feu pfSense | 1 | 575 000 FCFA (≈ 999 $), licence incluse | 575 000 FCFA |
-| Snort | — | — | Open source | — |
-| Suite ELK | — | — | Open source | — |
-| Main d'œuvre | 80 h (8 h/j) | — | 3 000 FCFA/h | 240 000 FCFA |
-| Formation du personnel | 5 personnes (1 j/pers.) | — | 100 000 FCFA | 500 000 FCFA |
-| Maintenance annuelle | — | — | — | 150 000 FCFA |
-| **Total général** | | | | **3 400 000 FCFA** |
-
----
-
 ## 10. Conclusion et perspectives
 
 La solution implémentée — **pfSense** (filtrage réseau) + **Snort IDS/IPS** (détection et prévention, intégré nativement au pare-feu) + **Winlogbeat** (collecte des journaux Windows) + **suite ELK** (analyse et visualisation en temps réel) — s'est montrée capable de :
