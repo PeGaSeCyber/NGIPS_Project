@@ -1,20 +1,8 @@
-# 🛡️ Étude et mise en place d'un système de prévention d'intrusion de nouvelle génération (NGIPS) — Cas de HOMINTEC TOGO
-
-> **Mémoire de fin de formation — Licence Professionnelle**
-> **Domaine :** Sciences et Technologies · **Mention :** Informatique · **Spécialité :** Systèmes et Réseaux Informatiques
-> **Établissement :** École Polytechnique de Lomé (EPL) — Université de Lomé
-> **Numéro d'ordre :** 2026/SR-009 · **Soutenu le :** 23/07/2026
-> **Auteur :** AKAMA Kodjovi Jean-Hugues
-> **Structure d'accueil :** HOMINTEC TOGO
-> **Directeur de mémoire :** Dr TOSSOU Kodjo E. Francis · **Maître de stage :** M. BARKA Honoré
-
-> ⚠️ Ce README se concentre sur les **éléments techniques** du mémoire (problématique, solution, architecture, configuration, tests, résultats). Les parties institutionnelles (présentation de l'EPL, organigrammes, dédicaces, remerciements, jury) ne sont pas reprises.
-
+# 🛡️ Étude et mise en place d'un système de prévention d'intrusion de nouvelle génération (NGIPS) 
 ---
-
 ## 📑 Table des matières
 
-1. [Contexte et problématique](#1-contexte-et-problématique)
+
 2. [Objectifs du projet](#2-objectifs-du-projet)
 3. [Choix technologiques](#3-choix-technologiques)
 4. [Architecture de la solution](#4-architecture-de-la-solution)
@@ -29,13 +17,11 @@
 
 ---
 
-## 1. Contexte et problématique
 
-Le projet s'inscrit dans le cadre d'un stage réalisé chez **HOMINTEC TOGO**, entreprise spécialisée dans l'automatisation et les technologies avancées (péage, parking, sécurité, contrôle d'accès, régulation industrielle). Parmi ses clients, la **SAFER** (Société Autonome de Financement de l'Entretien Routier) souhaite faire évoluer le réseau informatique de son **poste de péage de Davié** vers un accès à distance, ce qui implique une ouverture du réseau vers Internet et donc un renforcement de la sécurité.
 
 ### Réseau existant (étude fonctionnelle, sans détails sensibles)
 
-Pour des raisons de confidentialité, la topologie exacte, les adresses IP réelles et les règles de sécurité internes ne sont pas divulguées. Le réseau étudié est décrit comme :
+Le réseau étudié est décrit comme :
 
 - un **réseau local** dédié aux opérations de péage ;
 - des **postes de travail** dans les cabines de péage ;
