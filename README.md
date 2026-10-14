@@ -54,39 +54,14 @@ Le réseau étudié est décrit comme :
 
 **Méthodologie suivie :**
 1. Analyse de l'existant (audit)
-2. Étude comparative des solutions existantes et choix de la solution adaptée
 3. Conception de l'architecture intégrant le NGIPS
 4. Déploiement en environnement de test
 5. Validation et tests finaux
-6. Rédaction du mémoire
 
 ---
 
-## 3. Choix technologiques
-
-### 3.1 Pare-feu : comparatif et choix de pfSense
-
-Un pare-feu est la première ligne de défense d'une architecture réseau ; les pare-feux de nouvelle génération (NGFW) ajoutent l'inspection applicative, le contrôle des applications et l'exploitation de renseignements sur les menaces.
-
 ![Positionnement d'un pare-feu dans un réseau](images/figure-3-1.png)
 *Positionnement standard d'un pare-feu dans une architecture réseau*
-
-| Solution | Type | Points forts | Limites | Public cible |
-|---|---|---|---|---|
-| **Cisco ASA / Firepower** | Matériel professionnel | Performance et fiabilité éprouvées, intégration Cisco, support pro | Coût élevé, configuration complexe | Grandes entreprises, datacenters |
-| **pfSense** | Logiciel open source (FreeBSD) | Gratuit, flexible, grande communauté, fonctionne sur matériel standard ou VM | Pas de support officiel gratuit, performance liée au matériel | PME/PMI, SOC open-source |
-| **Fortinet FortiGate** | Matériel NGFW | Performance via ASIC dédiés, gestion centralisée (FortiManager), FortiGuard | Licence par abonnement, interface moins intuitive | Grandes entreprises |
-| **OPNsense** | Logiciel open source (fork de pfSense, 2015) | Mises à jour fréquentes, interface moderne, 100 % open source | Communauté plus petite, documentation moins exhaustive | PME, institutions publiques |
-
-**Choix retenu : pfSense**, pour sa flexibilité, son caractère open source et son intégration native d'IDS/IPS performants (Snort, Suricata), son coût de déploiement réduit et sa communauté active.
-
-### 3.2 Outil IDS/IPS : comparatif et choix de Snort
-
-| | IDS (Intrusion Detection System) | IPS (Intrusion Prevention System) |
-|---|---|---|
-| **Rôle** | Analyse une copie du trafic, émet des alertes | Analyse le trafic en ligne et en temps réel |
-| **Action** | N'intervient pas sur le trafic (détection passive) | Bloque automatiquement les flux malveillants |
-| **Limite** | Le réseau peut être infecté malgré la détection | Dépend des signatures, risque de faux positifs |
 
 ![Système de détection d'intrusion (IDS)](images/figure-3-6.png)
 *Position d'un IDS dans un réseau*
@@ -98,38 +73,11 @@ Types d'IPS selon la position : **NIPS** (Network IPS, protège l'ensemble du r�
 
 > Architecture classique : pare-feu puis IPS en équipements distincts. Architecture retenue ici : **IDS/IPS intégré nativement au pare-feu** (Snort au sein de pfSense), donnant un NGFW/NGIPS en un seul équipement — réduction du coût et de la complexité de gestion.
 
-| Critère | Snort | Suricata |
-|---|---|---|
-| Architecture | Monothread (une instance par cœur) | Multithread, exploite pleinement le multicœur |
-| Performance | Suffisante pour trafic modéré | Haute performance sur trafic élevé |
-| Inspection | Signatures (IDS/IPS) | Signatures + DPI (analyse protocolaire avancée) |
-| Compatibilité des règles | Large base de règles Snort | Compatible règles Snort + règles propres enrichies |
-| Ressources | Moins exigeant en CPU/RAM | Plus gourmand en ressources |
-
-**Choix retenu : Snort**, solution mature, largement documentée, grande communauté, compatibilité éprouvée avec les règles existantes.
-
-### 3.3 Définition du NGIPS
-
-Le **NGIPS** (Next Generation Intrusion Prevention System) est une évolution des pare-feux, capable de filtrer, analyser, détecter et bloquer les menaces en temps réel, en s'appuyant sur :
-
-- **Inspection profonde des paquets (DPI)** — analyse du contenu applicatif, détection d'attaques complexes (injection SQL, exploitation web…)
-- **Signatures et intelligence des menaces** — bases mises à jour, intégration de Threat Intelligence (Talos, Emerging Threats…)
-- **Analyse comportementale** — détection d'anomalies et d'attaques inconnues
-- **Reconnaissance applicative (Layer 7)** — identification des applications, détection de contournements
-- **Prévention active** — blocage automatique, mise en quarantaine, alerte, journalisation
-- **Visualisation, logs et traçabilité** — export vers SIEM ou outils de supervision
-
-| Type de NGIPS | Exemples | Public cible |
-|---|---|---|
-| Open source | Suricata, Snort, Zeek | PME, écoles, SOC open-source |
-| Payant | Cisco Firepower, Palo Alto, Fortinet | Grandes entreprises, datacenters |
-| Hybride (Firewall + IPS) | pfSense + Snort, OPNsense + Suricata | PME, institutions publiques |
-
 ---
 
 ## 4. Architecture de la solution
 
-Par souci de confidentialité, une **architecture réseau de test** reproduisant l'essentiel du réseau réel a été conçue :
+ Une **architecture réseau de test** reproduisant l'essentiel du réseau réel a été conçue :
 
 ![Architecture réseau intégrant le NGIPS et ELK](images/figure-4-1.jpeg)
 *Architecture réseau de test — pfSense + Snort (NGIPS) et supervision ELK*
