@@ -1,3 +1,4 @@
+NGIPS - Next Generation Intrusion Prevention System
 # 🛡️ NGIPS — pfSense + Snort + ELK Stack
 
 Solution de prévention d'intrusion de nouvelle génération (NGIPS), déployée en environnement virtuel (GNS3 / VMware). Elle combine **pfSense** et **Snort** pour le filtrage, la détection et le blocage actif des menaces, associés à la **suite ELK** pour la centralisation et la visualisation des journaux de sécurité.
@@ -136,7 +137,7 @@ Toutes les attaques ont été lancées depuis la machine Kali Linux (VM3, positi
 - Les trois attaques réseau testées (scan, DoS, brute force) ont été **détectées puis bloquées automatiquement**, confirmant le fonctionnement en mode IPS (et non simple IDS passif).
 - Les tentatives de connexion échouées sur les postes Windows sont remontées en temps réel dans Kibana via Winlogbeat, avec horodatage et nom d'utilisateur concerné.
 - Les journaux du pare-feu et des postes clients sont centralisés dans une seule interface de supervision (Kibana).
-
+NB: Consultez les versions officielles de la suite ELK, les versions changent régulièrement.
 > 💡 Ajoutez ici vos captures d'écran (dashboards Kibana, alertes Snort, etc.), par exemple dans un dossier `docs/screenshots/`.
 
 ## 📈 Perspectives techniques
