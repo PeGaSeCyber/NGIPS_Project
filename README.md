@@ -323,4 +323,3 @@ Sélection des références techniques citées dans le mémoire (liste complète
 | VMware Workstation/Fusion | <https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion> |
 | Suite Elastic (ELK) | <https://www.elastic.co> · Documentation : <https://www.elastic.co/guide> |
 | Analyse Snort 3 (Cisco) | <https://www.cisco.com/c/en/us/td/docs/security/secure-firewall/management-center/snort3/...> |
-> Les logos des produits présentés (Cisco ASA, PfSense, Fortinet, OPNsense, Snort, Suricata, GNS3, VMware, ELK) ainsi que les figures institutionnelles (localisation et organigrammes de l'EPL et de HOMINTEC) n'ont pas été repris ici, conformément à la demande de ne garder que les éléments techniques pertinents.
