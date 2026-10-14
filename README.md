@@ -1,27 +1,23 @@
 # 🛡️ Étude et mise en place d'un système de prévention d'intrusion de nouvelle génération (NGIPS) - pfSense, Snort, ELK
 ---
 ## 📑 Table des matières
-
-
-
-4. [Architecture de la solution](#4-architecture-de-la-solution)
-5. [Environnement de test](#5-environnement-de-test)
-6. [Mise en œuvre](#6-mise-en-œuvre)
-7. [Tests d'intrusion et résultats](#7-tests-dintrusion-et-résultats)
-8. [Supervision avec la suite ELK](#8-supervision-avec-la-suite-elk)
-10. [Conclusion et perspectives](#10-conclusion-et-perspectives)
-11. [Références](#11-références)
-12. [Liste des figures](#12-liste-des-figures)
+1. [Architecture de la solution](#4-architecture-de-la-solution)
+2. [Environnement de test](#5-environnement-de-test)
+3. [Mise en œuvre](#6-mise-en-œuvre)
+4. [Tests d'intrusion et résultats](#7-tests-dintrusion-et-résultats)
+5. [Supervision avec la suite ELK](#8-supervision-avec-la-suite-elk)
+6. [Conclusion et perspectives](#10-conclusion-et-perspectives)
+7. [Références](#11-références)
 
 
 ![Positionnement d'un pare-feu dans un réseau](images/figure-3-1.png)
-*Positionnement standard d'un pare-feu dans une architecture réseau*
+*Positionnement standard d'un pare-feu dans une architecture réseau (pfSense)*
 
 ![Système de détection d'intrusion (IDS)](images/figure-3-6.png)
-*Position d'un IDS dans un réseau*
+*Position d'un IDS dans un réseau (Fonction IDS de Snort)*
 
 ![Système de prévention d'intrusion (IPS)](images/figure-3-7.png)
-*Fonctionnement d'un IPS*
+*Fonctionnement d'un IPS (Fonction IPS de Snort)*
 
 Types d'IPS selon la position : **NIPS** (Network IPS, protège l'ensemble du réseau) et **HIPS** (Host IPS, protège un hôte spécifique).
 
@@ -29,7 +25,7 @@ Types d'IPS selon la position : **NIPS** (Network IPS, protège l'ensemble du r�
 
 ---
 
-## 4. Architecture de la solution
+## 1. Architecture de la solution
 
  Une **architecture réseau de test** reproduisant l'essentiel du réseau réel a été conçue :
 
@@ -48,7 +44,7 @@ La machine attaquante est positionnée sur le réseau WAN (Internet), simulant u
 
 ---
 
-## 5. Environnement de test
+## 2. Environnement de test
 
 Travaux réalisés en environnement **entièrement virtualisé** (GNS3 + VMware Workstation 17), sur un poste HP ProBook 435 G8 (AMD Ryzen 7 PRO 5850U, 32 Go RAM, 512 Go SSD, Windows 11 Pro, virtualisation activée).
 
@@ -60,9 +56,9 @@ Travaux réalisés en environnement **entièrement virtualisé** (GNS3 + VMware 
 
 ---
 
-## 6. Mise en œuvre
+## 3. Mise en œuvre
 
-### 6.1 Configuration réseau et installation de pfSense
+### 3.1 Configuration réseau et installation de pfSense
 
 ![Création des cartes réseaux](images/figure-4-6.png)
 *Création du réseau virtuel VMNet3 et de l'interface NAT*
@@ -85,7 +81,7 @@ Travaux réalisés en environnement **entièrement virtualisé** (GNS3 + VMware 
 ![Tableau de bord PfSense](images/figure-4-12.png)
 *Tableau de bord pfSense avec les 3 interfaces (WAN, LAN, DMZ) actives*
 
-### 6.2 Installation et configuration de Snort
+### 3.2 Installation et configuration de Snort
 
 Installation via **Système → Gestionnaire de paquets → Paquets disponibles → recherche « snort » → Install**.
 
@@ -122,11 +118,11 @@ L'option **« Block Offenders »** a été activée sur chaque interface afin qu
 
 ---
 
-## 7. Tests d'intrusion et résultats
+## 4. Tests d'intrusion et résultats
 
 Trois attaques ont été lancées depuis la machine Kali Linux (VM3, positionnée sur le WAN) vers la machine cible Ubuntu (`192.168.1.104`), afin de valider le comportement **détection + blocage** de Snort.
 
-### 7.1 Scan de ports (Nmap)
+### 4.1 Scan de ports (Nmap)
 
 ```bash
 nmap 192.168.1.104
@@ -143,7 +139,7 @@ nmap 192.168.1.104
 
 **Résultat :** détection ✅ — blocage ✅
 
-### 7.2 Attaque par déni de service (DoS — inondation SYN)
+### 4.2 Attaque par déni de service (DoS — inondation SYN)
 
 ```bash
 hping3 --flood --rand-source -S -p 22 192.168.1.104
@@ -162,7 +158,7 @@ Envoi massif de paquets SYN vers le port 22 de la cible, avec adresses IP source
 
 **Résultat :** détection ✅ — blocage ✅
 
-### 7.3 Attaque par force brute (SSH)
+### 4.3 Attaque par force brute (SSH)
 
 ```bash
 hydra -l NGiPS -P /usr/share/wordlists/rockyou.txt.gz ssh://192.168.1.104
@@ -181,7 +177,7 @@ Tentative de connexion SSH par force brute avec l'outil **Hydra**, utilisateur `
 
 **Résultat :** détection ✅ — blocage ✅ (l'erreur « No route to host » confirme le blocage réseau)
 
-### 7.4 Synthèse des tests
+### 4.4 Synthèse des tests
 
 | Attaque | Outil | Cible | Détection Snort | Blocage Snort |
 |---|---|---|---|---|
@@ -191,11 +187,11 @@ Tentative de connexion SSH par force brute avec l'outil **Hydra**, utilisateur `
 
 ---
 
-## 8. Supervision avec la suite ELK
+## 5. Supervision avec la suite ELK
 
 La suite **ELK (Elasticsearch, Logstash, Kibana)**, développée par Elastic, assure la collecte, le stockage, l'analyse et la visualisation des logs ; combinée à des règles de détection/corrélation, elle peut fonctionner comme un **SIEM**.
 
-### 8.1 Installation d'Elasticsearch et Kibana (sur VM1 — Ubuntu Server)
+### 5.1 Installation d'Elasticsearch et Kibana (sur VM1 — Ubuntu Server)
 
 ```bash
 # Prérequis
@@ -245,7 +241,7 @@ Connexion sécurisée obtenue à l'adresse `https://192.168.222.138:5601` :
 ![Page de connexion Kibana](images/figure-4-32.png)
 *Interface de connexion à Kibana*
 
-### 8.2 Installation et configuration de l'agent Winlogbeat (sur VM2 — Windows)
+### 5.2 Installation et configuration de l'agent Winlogbeat (sur VM2 — Windows)
 
 **Winlogbeat** collecte les événements du journal Windows (connexions, tentatives échouées, comptes bloqués…) et les envoie vers Elasticsearch. Téléchargement : <https://www.elastic.co/downloads/beats/winlogbeat>
 
@@ -278,7 +274,7 @@ PS C:\> Start-Service winlogbeat
 ![Vérification de Winlogbeat](images/figure-4-34.png)
 *Vérification de la communication Winlogbeat → ELK (« Data successfully received »)*
 
-### 8.3 Test : détection d'une authentification non légitime
+### 5.3 Test : détection d'une authentification non légitime
 
 Scénario : tentative de connexion à la session utilisateur **« User »** avec un mot de passe erroné, pour observer la réaction de la supervision.
 
@@ -297,7 +293,7 @@ Scénario : tentative de connexion à la session utilisateur **« User »** avec
 
 ---
 
-## 10. Conclusion et perspectives
+## 6. Conclusion et perspectives
 
 La solution implémentée — **pfSense** (filtrage réseau) + **Snort IDS/IPS** (détection et prévention, intégré nativement au pare-feu) + **Winlogbeat** (collecte des journaux Windows) + **suite ELK** (analyse et visualisation en temps réel) — s'est montrée capable de :
 
@@ -309,7 +305,7 @@ La solution implémentée — **pfSense** (filtrage réseau) + **Snort IDS/IPS**
 
 ---
 
-## 11. Références
+## 7. Références
 
 Sélection des références techniques citées dans le mémoire (liste complète dans le document original) :
 
@@ -327,51 +323,4 @@ Sélection des références techniques citées dans le mémoire (liste complète
 | VMware Workstation/Fusion | <https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion> |
 | Suite Elastic (ELK) | <https://www.elastic.co> · Documentation : <https://www.elastic.co/guide> |
 | Analyse Snort 3 (Cisco) | <https://www.cisco.com/c/en/us/td/docs/security/secure-firewall/management-center/snort3/...> |
-| HOMINTEC | <https://homintec.com/> |
-
----
-
-## 12. Liste des figures retenues
-
-| Figure | Titre | Fichier |
-|---|---|---|
-| 3.1 | Positionnement d'un pare-feu dans un réseau informatique | `images/figure-3-1.png` |
-| 3.6 | Système de détection d'intrusion (IDS) | `images/figure-3-6.png` |
-| 3.7 | Système de prévention d'intrusion (IPS) | `images/figure-3-7.png` |
-| 4.1 | Architecture réseau intégrant le NGIPS et ELK | `images/figure-4-1.jpeg` |
-| 4.5 | Interaction Winlogbeat et ELK | `images/figure-4-5.png` |
-| 4.6 | Création des cartes réseaux | `images/figure-4-6.png` |
-| 4.7 | Interfaces WAN et LAN | `images/figure-4-7.png` |
-| 4.8 | Test de connectivité | `images/figure-4-8.png` |
-| 4.9 | Vérification de l'adressage du serveur | `images/figure-4-9.png` |
-| 4.10 | Création de l'interface DMZ | `images/figure-4-10.png` |
-| 4.11 | Connexion à PfSense | `images/figure-4-11.png` |
-| 4.12 | Tableau de bord PfSense | `images/figure-4-12.png` |
-| 4.13 | Installation de Snort | `images/figure-4-13.png` |
-| 4.14 | Accès à l'interface de Snort | `images/figure-4-14.png` |
-| 4.15 | Paramètres généraux de Snort | `images/figure-4-15.png` |
-| 4.16 | Paramètres de mises à jour | `images/figure-4-16.png` |
-| 4.17 | Paramètres de l'interface WAN | `images/figure-4-17.png` |
-| 4.18 | Règles de l'interface WAN | `images/figure-4-18.png` |
-| 4.19 | Règles WAN Catégories | `images/figure-4-19.png` |
-| 4.20 | Activation des règles de Snort | `images/figure-4-20.png` |
-| 4.21 | Activation des interfaces sur Snort | `images/figure-4-21.png` |
-| 4.22 | Scan Nmap | `images/figure-4-22.png` |
-| 4.23 | Détection des alertes Nmap | `images/figure-4-23.png` |
-| 4.24 | Tentatives Nmap bloqués | `images/figure-4-24.png` |
-| 4.25 | Attaque DoS | `images/figure-4-25.png` |
-| 4.26 | Détection de l'attaque DoS | `images/figure-4-26.png` |
-| 4.27 | Blocage de l'attaque DoS | `images/figure-4-27.png` |
-| 4.28 | Attaque par brute force | `images/figure-4-28.png` |
-| 4.29 | Détection de la tentative de connexion par brute force | `images/figure-4-29.png` |
-| 4.30 | Blocage de la tentative de connexion par brute force | `images/figure-4-30.png` |
-| 4.31 | Installation d'Elasticsearch | `images/figure-4-31.png` |
-| 4.32 | Page de connexion Kibana | `images/figure-4-32.png` |
-| 4.33 | Configuration de Winlogbeat | `images/figure-4-33.png` |
-| 4.33b | Démarrage du service Winlogbeat (PowerShell) | `images/figure-4-33b-start-service.jpg` |
-| 4.34 | Vérification de Winlogbeat | `images/figure-4-34.png` |
-| 4.35 | Tentative de connexion erronée | `images/figure-4-35.png` |
-| 4.36 | Connexion rejetée | `images/figure-4-36.png` |
-| 4.37 | Détection des activités sur Windows | `images/figure-4-37.png` |
-
 > Les logos des produits présentés (Cisco ASA, PfSense, Fortinet, OPNsense, Snort, Suricata, GNS3, VMware, ELK) ainsi que les figures institutionnelles (localisation et organigrammes de l'EPL et de HOMINTEC) n'ont pas été repris ici, conformément à la demande de ne garder que les éléments techniques pertinents.
