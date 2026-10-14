@@ -1,64 +1,18 @@
-# 🛡️ Étude et mise en place d'un système de prévention d'intrusion de nouvelle génération (NGIPS) 
+# 🛡️ Étude et mise en place d'un système de prévention d'intrusion de nouvelle génération (NGIPS) - pfSense, Snort, ELK
 ---
 ## 📑 Table des matières
 
 
-2. [Objectifs du projet](#2-objectifs-du-projet)
-3. [Choix technologiques](#3-choix-technologiques)
+
 4. [Architecture de la solution](#4-architecture-de-la-solution)
 5. [Environnement de test](#5-environnement-de-test)
 6. [Mise en œuvre](#6-mise-en-œuvre)
 7. [Tests d'intrusion et résultats](#7-tests-dintrusion-et-résultats)
 8. [Supervision avec la suite ELK](#8-supervision-avec-la-suite-elk)
-9. [Évaluation financière](#9-évaluation-financière)
 10. [Conclusion et perspectives](#10-conclusion-et-perspectives)
 11. [Références](#11-références)
 12. [Liste des figures](#12-liste-des-figures)
 
----
-
-
-
-### Réseau existant (étude fonctionnelle, sans détails sensibles)
-
-Le réseau étudié est décrit comme :
-
-- un **réseau local** dédié aux opérations de péage ;
-- des **postes de travail** dans les cabines de péage ;
-- des **commutateurs** interconnectant les postes clients ;
-- un **serveur central**, seul équipement disposant d'un accès Internet limité (maintenance à distance).
-
-| Points positifs | Limites |
-|---|---|
-| Faible exposition aux menaces externes (postes clients non connectés à Internet) | Isolement empêchant le contrôle à distance par l'administrateur |
-| Architecture simple, stable, adaptée à un environnement critique | Accès Internet du serveur = point d'entrée potentiel si non protégé |
-| Facilité de gestion du réseau local | Absence de détection/prévention d'intrusion → vulnérabilité aux attaques sophistiquées |
-| Vérification antivirus sur branchement de clé USB | Contrôle d'accès physique limité à la salle serveur (pas aux cabines) |
-| | Architecture non prête pour une ouverture sécurisée vers Internet (FAI : Yas Togo) |
-
-### Problématique
-
-> Comment détecter, analyser et bloquer efficacement les menaces en temps réel tout en supervisant les activités réseau, et comment intégrer cette solution de sécurité aux infrastructures déjà en place chez les clients de HOMINTEC, sans perturber leurs opérations ?
-
----
-
-## 2. Objectifs du projet
-
-**Objectif général :** superviser les activités du réseau en améliorant sa protection contre les intrusions, tout en accompagnant son ouverture progressive vers l'extérieur.
-
-**Objectifs spécifiques :**
-- Superviser en continu le trafic réseau
-- Centraliser les journaux d'activité des postes clients et les alertes
-- Mettre en place un blocage automatique et en temps réel des menaces détectées
-- Documenter l'architecture, les procédures d'exploitation et les guides de déploiement
-
-**Méthodologie suivie :**
-1. Analyse de l'existant (audit)
-3. Conception de l'architecture intégrant le NGIPS
-4. Déploiement en environnement de test
-5. Validation et tests finaux
-
----
 
 ![Positionnement d'un pare-feu dans un réseau](images/figure-3-1.png)
 *Positionnement standard d'un pare-feu dans une architecture réseau*
